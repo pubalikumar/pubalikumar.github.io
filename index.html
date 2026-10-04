@@ -1,1 +1,1022 @@
-Hallo Pubali!
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Finder Germany</title>
+
+<style>
+:root {
+  --green: #244d3a;
+  --green-light: #e8efe7;
+  --cream: #f8f7f1;
+  --text: #25352b;
+  --muted: #68766c;
+  --border: #dce3d9;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  background: var(--green);
+  color: white;
+  padding: 36px 6%;
+}
+
+header .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+  opacity: .8;
+}
+
+header h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: normal;
+  margin: 12px 0;
+}
+
+header p {
+  max-width: 680px;
+  line-height: 1.7;
+  color: #e2eade;
+}
+
+main {
+  max-width: 1450px;
+  margin: auto;
+  padding: 28px 3%;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.filters, .plant-card, .toolbar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.filters {
+  padding: 22px;
+  position: sticky;
+  top: 12px;
+}
+
+.filter-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h2, h3 { margin-top: 0; }
+
+h2 { font-size: 20px; }
+
+h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.filter-group {
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+input, select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.field { margin-bottom: 12px; }
+
+.range-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+  margin: 12px 0;
+}
+
+.check input {
+  width: auto;
+  margin: 0;
+}
+
+button {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover { opacity: .82; }
+
+.primary {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+
+.reset {
+  font-size: 12px;
+  padding: 7px 10px;
+}
+
+.toolbar {
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.toolbar-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 12px;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+
+#resultCount { font-weight: bold; }
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.plant-card {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.plant-art {
+  min-height: 100px;
+  background: var(--green-light);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.plant-content {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.category {
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 20px;
+  padding: 5px 9px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.plant-card h3 {
+  font-family: Georgia, serif;
+  font-size: 19px;
+  line-height: 1.35;
+  margin: 14px 0 5px;
+}
+
+.latin {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #526257;
+  flex: 1;
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.spec-label {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.spec-value {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.tag {
+  background: #f3f4ef;
+  border-radius: 5px;
+  padding: 5px 7px;
+  font-size: 10px;
+}
+
+.details-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.details {
+  font-size: 12px;
+  line-height: 1.7;
+  padding-top: 10px;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: center;
+  padding: 45px 20px;
+}
+
+.note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+@media (max-width: 1050px) {
+  .results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .filters { position: static; }
+  .results { grid-template-columns: 1fr; }
+  .toolbar-top { grid-template-columns: 1fr; }
+  header { padding: 28px 5%; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="eyebrow">Landscape planning · Germany</div>
+  <h1>Plant Species Finder</h1>
+  <p>
+    Discover trees, shrubs and perennials by dimensions, flowering
+    period, flower colour and growing conditions. Find suitable plants
+    for your next landscape or garden design.
+  </p>
+</header>
+
+<main>
+<div class="layout">
+
+  <aside class="filters">
+    <div class="filter-title">
+      <h2>Filters</h2>
+      <button class="reset" id="resetBtn">Reset all</button>
+    </div>
+
+    <div class="filter-group">
+      <h3>Plant category</h3>
+      <select id="category">
+        <option value="">All plant types</option>
+        <option value="Tree">Trees · Bäume</option>
+        <option value="Shrub">Shrubs · Sträucher</option>
+        <option value="Perennial">Perennials · Stauden</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <h3>Dimensions</h3>
+      <label>Height range (m)</label>
+      <div class="range-row">
+        <input id="heightMin" type="number" min="0" step="0.5"
+          placeholder="Min" aria-label="Minimum height">
+        <input id="heightMax" type="number" min="0" step="0.5"
+          placeholder="Max" aria-label="Maximum height">
+      </div>
+
+      <label style="margin-top:14px">Crown / spread diameter (m)</label>
+      <div class="range-row">
+        <input id="spreadMin" type="number" min="0" step="0.5"
+          placeholder="Min" aria-label="Minimum crown or spread">
+        <input id="spreadMax" type="number" min="0" step="0.5"
+          placeholder="Max" aria-label="Maximum crown or spread">
+      </div>
+      <p class="note">For perennials, diameter means approximate plant spread.</p>
+    </div>
+
+    <div class="filter-group">
+      <h3>Flowering period</h3>
+      <label for="month">Flowering in</label>
+      <select id="month">
+        <option value="">Any month</option>
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+
+      <label for="colour" style="margin-top:14px">Flower colour</label>
+      <select id="colour">
+        <option value="">All colours</option>
+        <option>White</option>
+        <option>Yellow</option>
+        <option>Pink</option>
+        <option>Red</option>
+        <option>Purple</option>
+        <option>Blue</option>
+        <option>Orange</option>
+        <option>Green</option>
+        <option>Inconspicuous</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <h3>Growing conditions</h3>
+      <label for="sun">Light exposure</label>
+      <select id="sun">
+        <option value="">Any light</option>
+        <option value="Full sun">Full sun</option>
+        <option value="Partial shade">Partial shade</option>
+        <option value="Shade">Shade</option>
+      </select>
+
+      <label for="moisture" style="margin-top:14px">Soil moisture</label>
+      <select id="moisture">
+        <option value="">Any moisture</option>
+        <option value="Dry">Dry</option>
+        <option value="Moderate">Moderate</option>
+        <option value="Moist">Moist</option>
+      </select>
+
+      <label for="soil" style="margin-top:14px">Soil preference</label>
+      <select id="soil">
+        <option value="">Any soil</option>
+        <option value="Well-drained">Well-drained</option>
+        <option value="Clay-tolerant">Clay-tolerant</option>
+        <option value="Sandy">Sandy</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <h3>Plant characteristics</h3>
+
+      <label for="origin">Origin</label>
+      <select id="origin">
+        <option value="">All origins</option>
+        <option value="Native">Native to Germany</option>
+        <option value="Introduced">Introduced / non-native</option>
+      </select>
+
+      <label for="foliage" style="margin-top:14px">Foliage</label>
+      <select id="foliage">
+        <option value="">All foliage types</option>
+        <option value="Deciduous">Deciduous</option>
+        <option value="Evergreen">Evergreen</option>
+      </select>
+
+      <label for="use" style="margin-top:14px">Landscape use</label>
+      <select id="use">
+        <option value="">All uses</option>
+        <option value="Street">Street planting</option>
+        <option value="Pollinator">Pollinator-friendly</option>
+        <option value="Hedge">Hedges</option>
+        <option value="Small garden">Small gardens</option>
+      </select>
+    </div>
+
+    <button class="primary" id="applyBtn" style="width:100%">
+      Apply filters
+    </button>
+  </aside>
+
+  <section>
+    <div class="toolbar">
+      <div class="toolbar-top">
+        <input id="search" type="search"
+          placeholder="Search German or botanical name..."
+          aria-label="Search plant names">
+
+        <select id="sort" aria-label="Sort results">
+          <option value="name">Sort: Name</option>
+          <option value="heightAsc">Height: Low to high</option>
+          <option value="heightDesc">Height: High to low</option>
+          <option value="spreadAsc">Spread: Low to high</option>
+          <option value="spreadDesc">Spread: High to low</option>
+        </select>
+      </div>
+
+      <div class="summary">
+        <span id="resultCount" aria-live="polite">Loading plants...</span>
+        <span class="note" style="margin:0">
+          Dimensions in metres · Flowering by month
+        </span>
+      </div>
+    </div>
+
+    <div class="results" id="results"></div>
+
+    <p class="note">
+      Prototype dataset for demonstration only. Plant dimensions and
+      flowering times vary with cultivar, climate, age and site.
+      Verify species-specific information before construction or planting.
+    </p>
+  </section>
+</div>
+</main>
+
+<script>
+// ----------------------------------------------------
+// PLANT DATABASE
+// Add or edit plant records in this array.
+// Heights, spreads and flowering months are approximate.
+// ----------------------------------------------------
+
+const plants = [
+  {
+    name: "Common Oak",
+    german: "Stieleiche",
+    latin: "Quercus robur",
+    category: "Tree",
+    height: 25,
+    spread: 20,
+    bloom: [4, 5],
+    colour: "Inconspicuous",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Pollinator"],
+    icon: "🌳",
+    description: "A large, long-lived native tree for parks and spacious landscapes."
+  },
+  {
+    name: "Small-leaved Lime",
+    german: "Winterlinde",
+    latin: "Tilia cordata",
+    category: "Tree",
+    height: 22,
+    spread: 12,
+    bloom: [6, 7],
+    colour: "Yellow",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Street", "Pollinator"],
+    icon: "🌳",
+    description: "A valuable flowering tree for urban streets, parks and pollinators."
+  },
+  {
+    name: "Silver Birch",
+    german: "Hängebirke",
+    latin: "Betula pendula",
+    category: "Tree",
+    height: 20,
+    spread: 8,
+    bloom: [4, 5],
+    colour: "Inconspicuous",
+    sun: "Full sun",
+    moisture: "Dry",
+    soil: ["Well-drained", "Sandy"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Small garden"],
+    icon: "🌳",
+    description: "An elegant light-canopied tree with distinctive pale bark."
+  },
+  {
+    name: "European Beech",
+    german: "Rotbuche",
+    latin: "Fagus sylvatica",
+    category: "Tree",
+    height: 25,
+    spread: 15,
+    bloom: [4, 5],
+    colour: "Inconspicuous",
+    sun: "Partial shade",
+    moisture: "Moderate",
+    soil: ["Well-drained"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Hedge"],
+    icon: "🌳",
+    description: "A major native woodland species, also used for tall clipped hedges."
+  },
+  {
+    name: "Field Maple",
+    german: "Feldahorn",
+    latin: "Acer campestre",
+    category: "Tree",
+    height: 12,
+    spread: 8,
+    bloom: [4, 5],
+    colour: "Yellow",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Street", "Hedge", "Pollinator"],
+    icon: "🌳",
+    description: "A versatile, relatively compact native tree suitable for hedges and streets."
+  },
+  {
+    name: "Common Hawthorn",
+    german: "Eingriffeliger Weißdorn",
+    latin: "Crataegus monogyna",
+    category: "Shrub",
+    height: 6,
+    spread: 5,
+    bloom: [5, 6],
+    colour: "White",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Hedge", "Pollinator"],
+    icon: "🌿",
+    description: "A thorny native shrub with spring flowers and wildlife-friendly fruit."
+  },
+  {
+    name: "Common Hazel",
+    german: "Gemeine Hasel",
+    latin: "Corylus avellana",
+    category: "Shrub",
+    height: 5,
+    spread: 4,
+    bloom: [1, 2, 3],
+    colour: "Inconspicuous",
+    sun: "Partial shade",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Hedge", "Pollinator"],
+    icon: "🌿",
+    description: "A multi-stemmed native shrub with conspicuous early catkins and edible nuts."
+  },
+  {
+    name: "Black Elder",
+    german: "Schwarzer Holunder",
+    latin: "Sambucus nigra",
+    category: "Shrub",
+    height: 6,
+    spread: 5,
+    bloom: [5, 6, 7],
+    colour: "White",
+    sun: "Partial shade",
+    moisture: "Moist",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Pollinator"],
+    icon: "🌿",
+    description: "A fast-growing shrub with broad flower clusters and dark berries."
+  },
+  {
+    name: "European Spindle",
+    german: "Pfaffenhütchen",
+    latin: "Euonymus europaeus",
+    category: "Shrub",
+    height: 4,
+    spread: 3,
+    bloom: [5, 6],
+    colour: "Green",
+    sun: "Partial shade",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Hedge", "Pollinator"],
+    icon: "🌿",
+    description: "A native shrub known for striking autumn foliage and colourful fruit."
+  },
+  {
+    name: "Lavender",
+    german: "Echter Lavendel",
+    latin: "Lavandula angustifolia",
+    category: "Perennial",
+    height: 0.7,
+    spread: 0.7,
+    bloom: [6, 7, 8],
+    colour: "Purple",
+    sun: "Full sun",
+    moisture: "Dry",
+    soil: ["Well-drained", "Sandy"],
+    origin: "Introduced",
+    foliage: "Evergreen",
+    uses: ["Pollinator", "Small garden"],
+    icon: "🪻",
+    description: "An aromatic, drought-tolerant plant for sunny and well-drained sites."
+  },
+  {
+    name: "Purple Coneflower",
+    german: "Purpursonnenhut",
+    latin: "Echinacea purpurea",
+    category: "Perennial",
+    height: 1.2,
+    spread: 0.6,
+    bloom: [7, 8, 9],
+    colour: "Purple",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained"],
+    origin: "Introduced",
+    foliage: "Deciduous",
+    uses: ["Pollinator", "Small garden"],
+    icon: "🌸",
+    description: "A summer-flowering perennial with prominent central flower cones."
+  },
+  {
+    name: "Black-eyed Susan",
+    german: "Rudbeckie",
+    latin: "Rudbeckia fulgida",
+    category: "Perennial",
+    height: 0.8,
+    spread: 0.6,
+    bloom: [7, 8, 9, 10],
+    colour: "Yellow",
+    sun: "Full sun",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Introduced",
+    foliage: "Deciduous",
+    uses: ["Pollinator", "Small garden"],
+    icon: "🌼",
+    description: "A long-flowering perennial with golden petals and dark centres."
+  },
+  {
+    name: "Woodland Sage",
+    german: "Steppen-Salbei",
+    latin: "Salvia nemorosa",
+    category: "Perennial",
+    height: 0.6,
+    spread: 0.5,
+    bloom: [5, 6, 7, 8],
+    colour: "Purple",
+    sun: "Full sun",
+    moisture: "Dry",
+    soil: ["Well-drained", "Sandy"],
+    origin: "Introduced",
+    foliage: "Deciduous",
+    uses: ["Pollinator", "Small garden"],
+    icon: "🪻",
+    description: "A compact, upright perennial with flower spikes attractive to bees."
+  },
+  {
+    name: "Yarrow",
+    german: "Gemeine Schafgarbe",
+    latin: "Achillea millefolium",
+    category: "Perennial",
+    height: 0.8,
+    spread: 0.6,
+    bloom: [6, 7, 8, 9],
+    colour: "White",
+    sun: "Full sun",
+    moisture: "Dry",
+    soil: ["Well-drained", "Sandy"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Pollinator", "Small garden"],
+    icon: "🌼",
+    description: "A widespread native perennial with finely divided leaves and flat flower heads."
+  },
+  {
+    name: "Common Ivy",
+    german: "Gemeiner Efeu",
+    latin: "Hedera helix",
+    category: "Perennial",
+    height: 0.5,
+    spread: 2,
+    bloom: [9, 10],
+    colour: "Green",
+    sun: "Shade",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Evergreen",
+    uses: ["Pollinator"],
+    icon: "🌿",
+    description: "An evergreen native climber and groundcover; spread depends on support and growing conditions."
+  },
+  {
+    name: "Common Snowdrop",
+    german: "Kleines Schneeglöckchen",
+    latin: "Galanthus nivalis",
+    category: "Perennial",
+    height: 0.15,
+    spread: 0.1,
+    bloom: [1, 2, 3],
+    colour: "White",
+    sun: "Partial shade",
+    moisture: "Moist",
+    soil: ["Well-drained"],
+    origin: "Introduced",
+    foliage: "Deciduous",
+    uses: ["Small garden"],
+    icon: "🌱",
+    description: "A small early-flowering bulb for woodland edges and partly shaded gardens."
+  },
+  {
+    name: "Common Juniper",
+    german: "Gemeiner Wacholder",
+    latin: "Juniperus communis",
+    category: "Shrub",
+    height: 4,
+    spread: 2,
+    bloom: [4, 5],
+    colour: "Inconspicuous",
+    sun: "Full sun",
+    moisture: "Dry",
+    soil: ["Well-drained", "Sandy"],
+    origin: "Native",
+    foliage: "Evergreen",
+    uses: ["Small garden"],
+    icon: "🌲",
+    description: "An evergreen conifer of open, sunny habitats; form and size vary considerably."
+  },
+  {
+    name: "Common Dogwood",
+    german: "Roter Hartriegel",
+    latin: "Cornus sanguinea",
+    category: "Shrub",
+    height: 4,
+    spread: 4,
+    bloom: [5, 6],
+    colour: "White",
+    sun: "Partial shade",
+    moisture: "Moderate",
+    soil: ["Well-drained", "Clay-tolerant"],
+    origin: "Native",
+    foliage: "Deciduous",
+    uses: ["Hedge", "Pollinator"],
+    icon: "🌿",
+    description: "A robust native shrub with white flower clusters and colourful autumn stems."
+  }
+];
+
+// ----------------------------------------------------
+// FILTERING AND DISPLAY
+// ----------------------------------------------------
+
+const $ = id => document.getElementById(id);
+
+const filterIds = [
+  "category", "heightMin", "heightMax", "spreadMin", "spreadMax",
+  "month", "colour", "sun", "moisture", "soil",
+  "origin", "foliage", "use"
+];
+
+function getValue(id) {
+  return $(id).value.trim();
+}
+
+function matchesFilters(p) {
+  const search = getValue("search").toLowerCase();
+
+  if (search && ![
+    p.name, p.german, p.latin, p.description
+  ].join(" ").toLowerCase().includes(search)) return false;
+
+  if (getValue("category") &&
+      p.category !== getValue("category")) return false;
+
+  const hMin = getValue("heightMin");
+  const hMax = getValue("heightMax");
+  const sMin = getValue("spreadMin");
+  const sMax = getValue("spreadMax");
+
+  // Plant dimensions must fit entirely within the selected range.
+  if (hMin !== "" && p.height < Number(hMin)) return false;
+  if (hMax !== "" && p.height > Number(hMax)) return false;
+  if (sMin !== "" && p.spread < Number(sMin)) return false;
+  if (sMax !== "" && p.spread > Number(sMax)) return false;
+
+  const month = getValue("month");
+  if (month && !p.bloom.includes(Number(month))) return false;
+
+  if (getValue("colour") &&
+      p.colour !== getValue("colour")) return false;
+
+  if (getValue("sun") &&
+      p.sun !== getValue("sun")) return false;
+
+  if (getValue("moisture") &&
+      p.moisture !== getValue("moisture")) return false;
+
+  if (getValue("soil") &&
+      !p.soil.includes(getValue("soil"))) return false;
+
+  if (getValue("origin") &&
+      p.origin !== getValue("origin")) return false;
+
+  if (getValue("foliage") &&
+      p.foliage !== getValue("foliage")) return false;
+
+  if (getValue("use") &&
+      !p.uses.includes(getValue("use"))) return false;
+
+  return true;
+}
+
+function floweringText(months) {
+  const names = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  return months.map(m => names[m - 1]).join(", ");
+}
+
+function renderPlants() {
+  const sort = getValue("sort");
+
+  let filtered = plants.filter(matchesFilters);
+
+  if (sort === "heightAsc") filtered.sort((a,b) => a.height - b.height);
+  if (sort === "heightDesc") filtered.sort((a,b) => b.height - a.height);
+  if (sort === "spreadAsc") filtered.sort((a,b) => a.spread - b.spread);
+  if (sort === "spreadDesc") filtered.sort((a,b) => b.spread - a.spread);
+  if (sort === "name") filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+  $("resultCount").textContent =
+    `${filtered.length} plant${filtered.length === 1 ? "" : "s"} found`;
+
+  const results = $("results");
+
+  if (!filtered.length) {
+    results.innerHTML = `
+      <div class="empty">
+        <h2>No plants match your filters</h2>
+        <p>Try increasing the dimensions or removing one of your filters.</p>
+        <button class="primary" id="emptyReset">Reset filters</button>
+      </div>`;
+    $("emptyReset").addEventListener("click", resetFilters);
+    return;
+  }
+
+  results.innerHTML = filtered.map((p, index) => `
+    <article class="plant-card">
+      <div class="plant-art" aria-hidden="true">${p.icon}</div>
+
+      <div class="plant-content">
+        <span class="category">${p.category}</span>
+
+        <h3>${p.german}</h3>
+        <div class="latin">${p.latin}</div>
+        <div style="font-size:12px;margin-top:5px">${p.name}</div>
+
+        <p class="description">${p.description}</p>
+
+        <div class="specs">
+          <div>
+            <span class="spec-label">Height</span>
+            <span class="spec-value">${p.height} m</span>
+          </div>
+          <div>
+            <span class="spec-label">Crown / spread</span>
+            <span class="spec-value">${p.spread} m</span>
+          </div>
+          <div>
+            <span class="spec-label">Flowering</span>
+            <span class="spec-value">${floweringText(p.bloom)}</span>
+          </div>
+          <div>
+            <span class="spec-label">Flower colour</span>
+            <span class="spec-value">${p.colour}</span>
+          </div>
+        </div>
+
+        <div class="tags">
+          <span class="tag">${p.origin === "Native" ? "Native" : "Introduced"}</span>
+          <span class="tag">${p.foliage}</span>
+          <span class="tag">${p.sun}</span>
+        </div>
+
+        <button class="details-btn" aria-expanded="false"
+          aria-controls="details-${index}"
+          data-details="${index}">More information +</button>
+
+        <div class="details" id="details-${index}" hidden>
+          <strong>Light:</strong> ${p.sun}<br>
+          <strong>Soil moisture:</strong> ${p.moisture}<br>
+          <strong>Soil:</strong> ${p.soil.join(", ")}<br>
+          <strong>Landscape uses:</strong> ${p.uses.join(", ")}<br>
+          <strong>Origin:</strong> ${p.origin === "Native"
+            ? "Native to Germany (check regional status)"
+            : "Introduced / non-native"}<br>
+          <strong>Foliage:</strong> ${p.foliage}
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  results.querySelectorAll("[data-details]").forEach(button => {
+    button.addEventListener("click", () => {
+      const panel = $("details-" + button.dataset.details);
+      const opening = panel.hidden;
+      panel.hidden = !opening;
+      button.textContent = opening ? "Less information −" : "More information +";
+      button.setAttribute("aria-expanded", String(opening));
+    });
+  });
+}
+
+function resetFilters() {
+  filterIds.forEach(id => $(id).value = "");
+  $("search").value = "";
+  $("sort").value = "name";
+  renderPlants();
+}
+
+// All controls update results immediately.
+filterIds.concat(["search", "sort"]).forEach(id => {
+  $(id).addEventListener("input", renderPlants);
+  $(id).addEventListener("change", renderPlants);
+});
+
+$("resetBtn").addEventListener("click", resetFilters);
+$("applyBtn").addEventListener("click", renderPlants);
+
+renderPlants();
+</script>
+
+</body>
+</html>
